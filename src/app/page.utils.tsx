@@ -1,27 +1,16 @@
 import { HeadCell } from "@/components/Table/Table.utils";
+import Typography from "@mui/material/Typography";
 
 export interface AuthorData {
-  id: number;
+  id: string;
   name: string;
   birth_date: string;
 }
 
-export const rows: AuthorData[] = [
-  {
-    id: 1,
-    name: "Pacio Genry",
-    birth_date: "23rd February 1986",
-  },
-  {
-    id: 2,
-    name: "Zosia Najwspanialsza",
-    birth_date: "13th March 2005",
-  },
-  {
-    id: 3,
-    name: "Zuzinka Kruszynka",
-    birth_date: "30th March 2008",
-  },
+export const authorBreadcrumbs = [
+  <Typography key='1' color='text.primary'>
+    Authors
+  </Typography>,
 ];
 
 export const headCells: HeadCell<AuthorData>[] = [

@@ -12,11 +12,12 @@ import Paper from "@mui/material/Paper";
 import { HeadCell, Order, getComparator } from "./Table.utils";
 import { stableSort } from "./Table.utils";
 import EnhancedTableHead from "./TableHead";
-import EnhancedTableToolbar from "./TableToolbar";
+import { useRouter } from "next/navigation";
 
 interface EnhancedTableProps<T> {
   rows: T[];
   headCells: HeadCell<T>[];
+  isClickable?: boolean;
 }
 
 const EnhancedTable = <T extends Object>(props: EnhancedTableProps<T>) => {
@@ -25,6 +26,7 @@ const EnhancedTable = <T extends Object>(props: EnhancedTableProps<T>) => {
   const [orderBy, setOrderBy] = useState("name");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const router = useRouter();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -35,7 +37,9 @@ const EnhancedTable = <T extends Object>(props: EnhancedTableProps<T>) => {
     setOrderBy(property as string);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>) => {};
+  const handleClick = (id: string) => {
+    props.isClickable && router.push(`author/${id}`);
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -63,7 +67,6 @@ const EnhancedTable = <T extends Object>(props: EnhancedTableProps<T>) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -79,19 +82,19 @@ const EnhancedTable = <T extends Object>(props: EnhancedTableProps<T>) => {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`;
-
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event)}
+                    onClick={() => handleClick(row.id)}
                     role='checkbox'
                     tabIndex={-1}
-                    key={String(row)}
+                    key={index}
                     sx={{ cursor: "pointer" }}
                   >
-                    {Object.keys(row).map((key) => (
-                      <TableCell align='left'>{row[key]}</TableCell>
+                    {Object.keys(row).map((key, index) => (
+                      <TableCell key={index} align='left'>
+                        {row[key]}
+                      </TableCell>
                     ))}
                   </TableRow>
                 );
